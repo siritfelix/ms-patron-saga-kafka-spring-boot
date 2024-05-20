@@ -1,0 +1,15 @@
+server:
+  port: ${PORT_CAR}
+spring:
+    profiles:
+        active:
+        - ${PROFILE}
+    application:
+        name: bookings
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR

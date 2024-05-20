@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  zipkin-server:
+    image: openzipkin/zipkin
+    networks:
+      - dev-network
+    ports:
+      - '9411:9411'
+    restart: always #Restart if there is a problem starting up
+networks:
+  dev-network:

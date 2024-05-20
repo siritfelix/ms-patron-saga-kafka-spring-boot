@@ -1,0 +1,33 @@
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR
+spring:
+    application:
+        name: carrental
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+kafka-config:
+    attempts: 3
+    producer:
+        topic: ${TOPIC_BOOKING}
+        topic-return: ${TOPIC_HOTEL}
+        bootstrap-servers: localhost:9092
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+        topic: ${TOPIC_CAR}
+        bootstrap-servers: localhost:9092
+        auto-offset-reset: earliest
+        group-id: grupo-1
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

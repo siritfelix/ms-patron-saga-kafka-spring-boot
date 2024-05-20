@@ -1,0 +1,52 @@
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR
+spring:
+    application:
+        name: bookings
+    jpa:
+        defer-datasource-initialization: true
+        database-platform: org.hibernate.dialect.H2Dialect
+        hibernate:
+            ddl-auto: create
+        show-sql: false
+    datasource:
+        url: jdbc:h2:mem:localdb
+        username: root
+        password: password
+    h2:
+        console:
+            enabled: true
+kafka-config:
+    producer:
+        topic: ${TOPIC_FLIGHT}
+        bootstrap-servers: localhost:9092
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+        topic: ${TOPIC_BOOKING}
+        bootstrap-servers: localhost:9092
+        auto-offset-reset: earliest
+        group-id: grupo-1
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+ms:
+  messages:
+    OK: respuesta exitosa
+    BR400: Error en el request
+    E500: Error interno
+    F401: No se encontro el xxx con id=
+    E403: No autorizado
+    E409: Ya existe un usuario con el email=
