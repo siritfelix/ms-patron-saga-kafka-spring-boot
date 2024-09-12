@@ -64,3 +64,21 @@ public class JacksonConfig {
     }
 }
  ```
+# Para preparar kafka en caso de varios consumidores del mismo topico
+En Kafka, un tópico puede estar dividido en múltiples particiones, y cada partición puede ser consumida por solo un consumidor dentro de un mismo grupo de consumidores. Esto significa que si escalas varias instancias de tu microservicio, cada instancia puede unirse al mismo grupo de consumidores y Kafka automáticamente distribuirá las particiones entre los consumidores activos en ese grupo. De esta manera, los mensajes en una partición específica serán procesados por solo una instancia del microservicio.
+Al crear un tópico en Kafka, puedes especificar cuántas particiones tendrá. Cada partición es una unidad de paralelismo, por lo que si tienes N instancias del microservicio, debes asegurarte de que el tópico tenga al menos N particiones. Para este caso, agregue otro docker-compose (/kafka-2) con una configuracion de kafka de deshabilita la creacion automatica de topicos (KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"), de forma tal que los podeamos crear con las tres particiones para poder agregar varios consumidores al mismo tiempo y preparar la arquitectura para la concurrencia
+
+ # Entrar al contenedor de Kafka
+> docker exec -it kafka-2 bash
+
+> kafka-topics --list --bootstrap-server localhost:9092
+
+# Crear los 4 tópicos con 3 particiones cada uno
+>kafka-topics --create --topic Booking --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+>kafka-topics --create --topic FlightReservation --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+>kafka-topics --create --topic HotelReservation --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+>kafka-topics --create --topic CarRental --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
